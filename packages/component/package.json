@@ -66,6 +66,7 @@
     "array-move": "^3.0.1",
     "qrcode.react": "^1.0.1",
     "react-resizable": "^3.0.4",
-    "react-sortable-hoc": "^2.0.0"
+    "react-sortable-hoc": "^2.0.0",
+    "rsuite": "^4.10.2"
   }
 }
