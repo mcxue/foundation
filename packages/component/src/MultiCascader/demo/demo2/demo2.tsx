@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { BlMultiCascader } from '@blacklake-web/component';
 import { Divider } from 'antd';
 
@@ -266,70 +266,87 @@ const data = [
         ]
     }
 ]
-export default () => (
-    <>
-        <div className="box">
-            <p>`-`连接：</p>
-            <BlMultiCascader data={data} defaultValue={['1-1', '1-2']} style={{ width: 300 }}
-                renderValue={(value, selectedItems, selectedElement) => (
-                    <span>
-                        {selectedItems.map(item => item.label).join(' - ')}
+export default () => {
+    const [value1, setValue1] = useState(['1-1', '1-2']);
+    const [value2, setValue2] = useState(['1-1', '1-2']);
+    const [value3, setValue3] = useState(['1-1', '1-2']);
+    const [value4, setValue4] = useState(['1-1', '1-2']);
+    const [value5, setValue5] = useState(['1-1', '1-2']);
+    return (
+        <>
+            <div className="box">
+                <p>`-`连接：</p>
+                <BlMultiCascader data={data} style={{ width: 300 }}
+                    value={value1}
+                    onChange={(value) => { console.log(`value1`, value); setValue1(value) }}
+                    renderValue={(value, selectedItems, selectedElement) => (
+                        <span>
+                            {selectedItems.map(item => item.label).join(' - ')}
+                        </span>
+                    )}
+                />
+            </div>
+            <div className="box">
+                <p>`/`连接：</p>
+                <BlMultiCascader data={data} style={{ width: 300 }}
+                    value={value2}
+                    onChange={(value) => { console.log(`value2`, value); setValue1(value) }}
+                    renderValue={(value, selectedItems, selectedElement) => (
+                        <span>
+                            {selectedItems.map(item => item.label).join(' / ')}
+                        </span>
+                    )}
+                />
+            </div>
+            <div className="box">
+                <p>`、`连接：</p>
+                <BlMultiCascader data={data} style={{ width: 300 }}
+                    value={value3}
+                    onChange={(value) => { console.log(`value3`, value); setValue1(value) }}
+                    renderValue={(value, selectedItems, selectedElement) => (
+                        <span>
+                            {selectedItems.map(item => item.label).join(' 、')}
+                        </span>
+                    )}
+                />
+            </div>
+            <Divider />
+            <div className="box">
+                <p>自定义拼接默认值：</p>
+                <BlMultiCascader data={data} style={{ width: 300 }}
+                    value={value4}
+                    onChange={(value) => { console.log(`value4`, value); setValue1(value) }}
+                    placeholder={
+                        <span>
+                            <i className="rs-icon rs-icon-map-marker" /> 地区
                     </span>
-                )}
-            />
-        </div>
-        <div className="box">
-            <p>`/`连接：</p>
-            <BlMultiCascader data={data} defaultValue={['1-1', '1-2']} style={{ width: 300 }}
-                renderValue={(value, selectedItems, selectedElement) => (
-                    <span>
-                        {selectedItems.map(item => item.label).join(' / ')}
-                    </span>
-                )}
-            />
-        </div>
-        <div className="box">
-            <p>`、`连接：</p>
-            <BlMultiCascader data={data} defaultValue={['1-1', '1-2']} style={{ width: 300 }}
-                renderValue={(value, selectedItems, selectedElement) => (
-                    <span>
-                        {selectedItems.map(item => item.label).join(' 、')}
-                    </span>
-                )}
-            />
-        </div>
-        <Divider />
-        <div className="box">
-            <p>自定义拼接默认值：</p>
-            <BlMultiCascader data={data} defaultValue={['1-1', '1-2']} style={{ width: 300 }}
-                placeholder={
-                    <span>
-                        <i className="rs-icon rs-icon-map-marker" /> 地区
-                </span>
-                }
-                renderValue={(value, selectedItems, selectedElement) => (
-                    <span>
-                        <span style={{ color: '#575757' }}>
-                            <i className="rs-icon rs-icon-map-marker" /> 地区 :
-                      </span>{' '}
-                        {selectedItems.map(item => item.label).join(' , ')}
-                    </span>
-                )}
-            />
-        </div>
-        <Divider />
-        <div className="box">
-            <p>自定义选项：</p>
-            <BlMultiCascader data={data} defaultValue={['1-1', '1-2']} style={{ width: 300 }}
-                renderMenuItem={(label, item) => {
-                    return (
-                        <div>
-                            <i className="rs-icon rs-icon-map-marker" />  {label}
-                        </div>
-                    );
-                }}
-            />
-        </div>
-    </>
+                    }
+                    renderValue={(value, selectedItems, selectedElement) => (
+                        <span>
+                            <span style={{ color: '#575757' }}>
+                                <i className="rs-icon rs-icon-map-marker" /> 地区 :
+                          </span>{' '}
+                            {selectedItems.map(item => item.label).join(' , ')}
+                        </span>
+                    )}
+                />
+            </div>
+            <Divider />
+            <div className="box">
+                <p>自定义选项：</p>
+                <BlMultiCascader data={data} style={{ width: 300 }}
+                    value={value5}
+                    onChange={(value) => { console.log(`value5`, value); setValue1(value) }}
+                    renderMenuItem={(label, item) => {
+                        return (
+                            <div>
+                                <i className="rs-icon rs-icon-map-marker" />  {label}
+                            </div>
+                        );
+                    }}
+                />
+            </div>
+        </>
 
-);
+    );
+}

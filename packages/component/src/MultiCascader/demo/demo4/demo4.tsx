@@ -1,12 +1,14 @@
 /**
- * title: 级联
- * desc: 默认是级联。级联的效果是，子集全选，则父级自动勾选；非级联的效果是子集的勾选与父级无关，适用于子集和父级并列每个层级都可多选的情况。
+ * title: 受控组件
+ * desc:  与 Form 组件一起使用
  *
  */
 
-import React, { useState } from 'react';
+
+import React from 'react';
 import { BlMultiCascader } from '@blacklake-web/component';
-import { Divider } from 'antd';
+import { Button, Form, Input } from 'antd';
+
 
 import './index.less'
 
@@ -267,30 +269,44 @@ const data = [
     }
 ]
 export default () => {
-    const [value1, setValue1] = useState(['1-1']);
-    const [value2, setValue2] = useState(['1-1']);
+    const [form] = Form.useForm();
+
+    const getIsNotLeafArray = () => {
+        const arr: string[] = [];
+        bianli(data);
+        function bianli(data) {
+            data?.map((item) => {
+                if (item?.children?.length > 0) {
+                    arr.push(item.value);
+                    bianli(item?.children);
+                }
+            })
+        }
+        console.log(`uncheckableItemValues`, arr)
+        return arr
+    }
+    const onFinish = (value) => {
+        console.log('onFinish', value);
+
+    }
     return (
         <>
             <div className="box">
-                <p>级联：</p>
-                <BlMultiCascader
-                    data={data}
-                    style={{ width: 300 }}
-                    value={value1}
-                    onChange={(value) => { console.log(`value1`, value); setValue1(value) }}
-                />
-            </div>
-            <Divider />
-            <div className="box">
-                <p>非级联：</p>
-                <BlMultiCascader
-                    cascade={false}
-                    data={data} style={{ width: 300 }}
-                    value={value2}
-                    onChange={(value) => { console.log(`value2`, value); setValue2(value) }}
-                />
+                <p>表单受控demo：只能选择叶子节点</p>
+
+                <Form onFinish={onFinish} form={form} initialValues={{ multiCascader: ['1-1-1'] }}>
+                    <Form.Item name="multiCascader" >
+                        <BlMultiCascader cascade={false} data={data} style={{ width: 300 }}
+                            uncheckableItemValues={getIsNotLeafArray()}
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">提交</Button>
+                    </Form.Item>
+                </Form>
             </div>
         </>
 
     );
 }
+

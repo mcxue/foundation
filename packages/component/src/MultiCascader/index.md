@@ -5,8 +5,8 @@ nav:
   path: /component
   order: 1
 group:
-  title: component
-  path: /component
+  title: BlPro
+  path: /BlPro
 ---
 
 
@@ -18,7 +18,12 @@ group:
 
 <code src="./demo/demo2/demo2.tsx" />
 
+### 受控组件
+<code src="./demo/demo3/demo3.tsx" />
+
 ### 叶子节点多选
+<code src="./demo/demo4/demo4.tsx" />
+
 ### 下拉框位置
 ### 禁用
 ### 异步
