@@ -1,5 +1,5 @@
 ---
-title: 多选 - MultiCascader
+title: 多选级联 - MultiCascader
 nav:
   title: 组件
   path: /component
@@ -9,20 +9,29 @@ group:
   path: /BlPro
 ---
 
-
 ### 级联选择
 
-<code src="./demo/demo1/demo1.tsx" />
+默认是级联。级联的效果是，子集全选，则父级自动勾选；非级联的效果是子集的勾选与父级无关，适用于子集和父级并列每个层级都可多选的情况。
 
-### 自定义选项
+<code src="./demo/demo1/demo1.tsx"></code>
 
-<code src="./demo/demo2/demo2.tsx" />
+### 自定义显示
+
+默认是`,`分割。可自定义选项的连接符；自定义拼接默认值；自定义选项内容
+
+<code src="./demo/demo2/demo2.tsx"></code>
 
 ### 受控组件
-<code src="./demo/demo3/demo3.tsx" />
+
+非级联 与 Form 组件一起使用
+
+<code src="./demo/demo3/demo3.tsx"></code>
 
 ### 叶子节点多选
-<code src="./demo/demo4/demo4.tsx" />
+
+非级联 与 Form 组件一起使用
+
+<code src="./demo/demo4/demo4.tsx"></code>
 
 ### 下拉框位置
 ### 禁用

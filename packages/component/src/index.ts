@@ -16,9 +16,9 @@ import type { BlMultiCascaderProps } from './MultiCascader/index.type';
 
 
 // 模拟数据
-import { cascaderOptions } from './mock/data';
+import { cascaderOptions, multiCascaderOptions } from './mock/data';
 
 export { Button, BlUpload, QRcode, TextToolTip, BlIcon, BlTable, BlCascader, BlMultiCascader };
-export { cascaderOptions };
+export { cascaderOptions, multiCascaderOptions };
 
 export type { ButtonProps, BlUploadProps, BlTableProps, BlColumnsType, BlCascaderProps, BlMultiCascaderProps };
