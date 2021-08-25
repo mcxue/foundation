@@ -12,12 +12,13 @@ group:
 ## 基础表现
 
 ```tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, message } from 'antd';
 import { RecordListLayout, FilterFieldType } from '@blacklake-web/layout';
 
 export default () => {
   const [selectedKeys, setSelectedKeys] = useState([]);
+  const [dataSource, setDataSource] = useState([]);
 
   const columns = [
     { title: '姓名', dataIndex: 'name', width: 200 },
@@ -43,6 +44,15 @@ export default () => {
               school: `school_${i}`,
               phone: `phone_${i}`,
               qq: `qq_${i}`,
+              childredn: [{
+                 name: `name_${i}${i}`,
+                 sex: `sex_${i}${i}`,
+                 old: `old_${i}${i}`,
+                 job: `job_${i}${i}`,
+                 school: `school_${i}${i}`,
+                 phone: `phone_${i}${i}`,
+                 qq: `qq_${i}${i}`,
+              }]
             };
             dataSource.push(item);
           }
@@ -50,6 +60,14 @@ export default () => {
         };
 
         const list = data();
+
+        const data2 = {
+          data: {
+            list,
+            total: list.length,
+          },
+        };
+        setDataSource(data2);
         resolve({
           data: {
             list,
@@ -59,6 +77,28 @@ export default () => {
       }, 2000);
     });
   };
+
+   const data = () => {
+    const dataSource = [];
+    for (let i = 1; i < 50; i++) {
+      const item = {
+        name: `name_${i}`,
+        sex: `sex_${i}`,
+        old: `old_${i}`,
+        job: `job_${i}`,
+        school: `school_${i}`,
+        phone: `phone_${i}`,
+        qq: `qq_${i}`,
+        children: []
+      };
+      dataSource.push(item);
+    }
+    return dataSource;
+  };
+
+  useEffect(() => {
+    requestFn();
+  }, [])
 
   const mainMenu = [
     {
@@ -145,6 +185,15 @@ export default () => {
         filterContaniner={false}
         selectedRowKeys={selectedKeys}
         onSelectedRowKeys={onSelectedRowKeys}
+        dataSource={dataSource}
+        customDataSource={data()}
+        expandable={{
+          onExpand: (expanded, record)=> {
+            if (expanded) {
+              console.log(record);
+            }
+          }
+        }}
       />
     </div>
   );
@@ -189,3 +238,9 @@ export default () => {
 | 参数              | 说明                                                        | 类型                                                                |
 | ----------------- | ----------------------------------------------------------- | ------------------------------------------------------------------- |
 | OnSelectedRowKeys | selectedRowKeys：选择的 rowKey 数组；selectRows：选择行数据 | `(selectedRowKeys: BlSelectedRowKeys, selectRows?: any[]) => void;` |
+
+## expandable 列表展开功能配置，可以搭配 customDataSource 修改dataSource （参考 antd 中表格的展开配置）
+
+| 参数              | 说明                                                        | 类型                                                                |
+| ----------------- | ----------------------------------------------------------- | ------------------------------------------------------------------- |
+| onExpand | 点击展开图标时触发 | `function(expanded, record)` |
