@@ -80,10 +80,16 @@ group:
 
 <code src="./demo/demo3/index.tsx"></code>
 
-### 异步加载
+### 动态加载选项
 
-> 注意：loadData 与 showSearch 无法一起使用。
-> loadData 默认值显示问题
+> 通常用来解决数据量巨大的情况
+> 注意：① loadData 模式 与 showSearch 一起使用，只能搜索已动态加载过的数据。
+> ② loadData 模式存在默认值时，未动态全部选项，所以在菜单展开时无法自动定位。
+> 因此，动态加载选项还需要另外一套搜索、菜单渲染逻辑
+
+1. 初始化 ：默认值，获取默认值的 options 塞到下拉菜单中
+2. 搜索请求后端，重新返回所有的 option，搜索关键字清空后重置
+   <code src="./demo/demo4/index.tsx"></code>
 
 ### 与 Form 表单一起使用
 

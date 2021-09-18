@@ -1,5 +1,5 @@
 import { CascaderProps } from 'antd';
-import { CascaderValueType } from 'antd/lib/cascader';
+import { CascaderOptionType, CascaderValueType } from 'antd/lib/cascader';
 
 export interface BlCascaderProps extends CascaderProps {
   /**
@@ -9,7 +9,7 @@ export interface BlCascaderProps extends CascaderProps {
   inputDisplayIsOnlyLeaf?: boolean;
   /**
    * [BL] 使用了inputDisplayIsOnlyLeaf属性,则必填
-   * @default defaultValue
+   * @default
    */
   getAllPathFn?: (leaf: CascaderValueType) => CascaderValueType;
   /**
@@ -17,4 +17,9 @@ export interface BlCascaderProps extends CascaderProps {
    * @default /
    */
   customDivider?: string;
+  /**
+   * [BL] 动态加载选项时，使用该搜索方式
+   * @default
+   */
+  onSearch?: (value) => CascaderOptionType[];
 }

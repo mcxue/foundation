@@ -1,9 +1,5 @@
 ---
 title: 多选级联 - MultiCascader
-nav:
-  title: 组件
-  path: /component
-  order: 1
 group:
   title: BlPro
   path: /BlPro
@@ -34,7 +30,9 @@ group:
 <code src="./demo/demo4/demo4.tsx"></code>
 
 ### 下拉框位置
+
 ### 禁用
+
 ### 异步
 
 <API />
