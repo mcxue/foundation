@@ -22,4 +22,9 @@ export interface BlCascaderProps extends CascaderProps {
    * @default
    */
   onSearch?: (value) => CascaderOptionType[];
+  /**
+   * [BL] 搜索输入框占位文本
+   * @default "请输入..."
+   */
+  searchPlaceholder?: string;
 }

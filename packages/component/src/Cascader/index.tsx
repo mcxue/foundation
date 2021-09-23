@@ -23,8 +23,9 @@ export const BlCascader = (props: BlCascaderProps) => {
     onChange,
     options,
     onSearch,
+    placeholder = '请选择...',
+    searchPlaceholder = '请输入...',
     fetchData,
-    placeholder = '请输入...',
   } = props;
   // 处理默认值
   const getDefaultValue = (value: CascaderValueType | undefined) => {
@@ -37,10 +38,10 @@ export const BlCascader = (props: BlCascaderProps) => {
     }
     return value;
   };
-  const [s_value, setvalue] = useState<CascaderValueType | undefined>(
+  const [blvalue, setBlvalue] = useState<CascaderValueType | undefined>(
     getDefaultValue(defaultValue) || getDefaultValue(value),
   );
-  const [s_options, setOptions] = useState<CascaderOptionType[]>(options);
+  const [bloptions, setBloptions] = useState<CascaderOptionType[]>(options);
   const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState<CascaderOptionType>();
 
@@ -48,7 +49,7 @@ export const BlCascader = (props: BlCascaderProps) => {
     value: CascaderValueType,
     selectedOptions?: CascaderOptionType[] | undefined,
   ) => {
-    setvalue(value);
+    setBlvalue(value);
     setSelectedOption(selectedOptions && selectedOptions[0]);
     onChange && onChange(value);
     return;
@@ -58,9 +59,9 @@ export const BlCascader = (props: BlCascaderProps) => {
     setLoading(true);
     try {
       if (typeof fetchData === 'function') {
-        const { data } = await fetchData();
+        const data = await fetchData();
         console.log(`data`, data);
-        setOptions(data);
+        setBloptions(data);
         setLoading(false);
       }
     } catch (error) {
@@ -71,29 +72,17 @@ export const BlCascader = (props: BlCascaderProps) => {
     const value = v.target.value;
     setLoading(true);
     if (value && selectedOption) {
-      // 有搜索内容，才把选中项塞到options中
-      setOptions([selectedOption]);
+      // 搜索时，把输入框的选中项塞到options中
+      setBloptions([selectedOption]);
     }
 
     if (typeof onSearch === 'function') {
       const { data } = await onSearch(value);
 
-      // selectedOption 塞到data上去
+      // selectedOption 塞到data上去,以保证输入框的值能正确的显示
       // 如果data上有selectedOption，从其中去重
-      [
-        selectedOption,
-        {
-          value: 'hubei',
-          label: '湖北',
-          isLeaf: false,
-        },
-        {
-          value: 'hunan',
-          label: '湖南',
-          isLeaf: false,
-        },
-      ];
-      setOptions(data);
+      const options = [selectedOption, ...data];
+      setBloptions(deDuplication(options));
       setLoading(false);
       return;
     }
@@ -104,7 +93,7 @@ export const BlCascader = (props: BlCascaderProps) => {
       return (
         <div>
           <div style={{ padding: 8 }}>
-            <Input suffix={suffix} placeholder={placeholder} onPressEnter={handleOnSearch} />
+            <Input suffix={suffix} placeholder={searchPlaceholder} onPressEnter={handleOnSearch} />
           </div>
           <Spin spinning={loading}>{menus}</Spin>
         </div>
@@ -122,6 +111,15 @@ export const BlCascader = (props: BlCascaderProps) => {
       </div>
     );
   }
+  // 去重函数
+  function deDuplication(arr) {
+    let obj = {};
+    const arrlist = arr.reduce((cur, next) => {
+      obj[next.value] ? '' : (obj[next.value] = true && cur.push(next));
+      return cur;
+    }, []);
+    return arrlist;
+  }
 
   return (
     <AntdCascader
@@ -136,8 +134,8 @@ export const BlCascader = (props: BlCascaderProps) => {
         return label.join(' / ');
       }}
       {...props}
-      options={s_options}
-      value={s_value}
+      options={bloptions}
+      value={blvalue}
       onChange={(value, selectedOptions) => handleOnChange(value, selectedOptions)}
       notFoundContent={loading ? notFoundContent() : '暂无数据'}
       dropdownRender={dropdownRender}

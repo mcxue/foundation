@@ -1,6 +1,6 @@
 /**
  * title: 关键属性
- * desc: loadData
+ * desc: loadData、onSearch
  *
  */
 
@@ -20,6 +20,11 @@ const optionLists = [
     label: '江苏',
     isLeaf: false,
   },
+  {
+    value: 'hubei',
+    label: '湖北',
+    isLeaf: true,
+  },
 ];
 
 const App = () => {
@@ -38,7 +43,7 @@ const App = () => {
   };
 
   const onChange = (value, selectedOptions) => {
-    console.log('use:onChange', value, selectedOptions);
+    console.log('value1', value, selectedOptions);
     setvalue2(value2);
   };
   const loadData = (selectedOptions) => {
@@ -58,7 +63,7 @@ const App = () => {
           value: 'dynamic2',
         },
       ];
-      setOptions([...options]);
+      // setOptions([...options]);
     }, 1000);
   };
   const searchData = (value) => {
@@ -102,9 +107,8 @@ const App = () => {
             console.log('value1: ', value1);
           }}
           style={{ width: 300 }}
-          placeholder={'请输入...'}
-          showSearch
           options={cascaderOptions}
+          showSearch
         />
       </div>
       <Divider />
@@ -125,9 +129,8 @@ const App = () => {
           style={{ width: 300 }}
           options={options}
           loadData={loadData}
-          asyncLoading
-          placeholder={'请输入...'}
           onSearch={(value) => {
+            // 模拟 发送后端请求
             return searchData(value);
           }}
         />
