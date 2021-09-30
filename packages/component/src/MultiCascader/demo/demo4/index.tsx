@@ -25,9 +25,9 @@ export default () => {
             setValue2(value);
             console.log(`结果2：${value}`);
           }}
-          onSearch={(value) => {
-            console.log(`搜索：${value}`);
-          }}
+          // onSearch={(value) => {
+          //   console.log(`搜索：${value}`);
+          // }}
         />
       </div>
       <Divider />

@@ -25,7 +25,7 @@ group:
 
 ### 级联选择
 
-- 默认是级联。
+- 默认是非级联。
 - 级联的效果是，子集全选，则父级自动勾选；
 - 非级联的效果是子集的勾选与父级无关，适用于子集和父级并列每个层级都可多选的情况。
 
@@ -43,10 +43,11 @@ group:
 
 <code src="./demo/demo2/index.tsx"></code>
 
-### 搜索
+<!-- ### 搜索
 
 默认 searchable 为 true
-<code src="./demo/demo4/index.tsx"></code>
+
+<code src="./demo/demo4/index.tsx"></code> -->
 
 ### 动态加载
 

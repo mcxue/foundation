@@ -1,6 +1,6 @@
 /**
  * title: 关键属性
- * desc: getChildren
+ * desc: loadData
  *
  */
 
@@ -39,10 +39,11 @@ export default () => {
     });
   }
   const defaultData = createChildren();
+
   return (
     <>
       <div className="box">
-        <p>全量加载：</p>
+        <p>全量加载+静态搜索：</p>
         <BlMultiCascader
           data={multiCascaderOptions}
           style={{ width: 300 }}
@@ -58,19 +59,21 @@ export default () => {
       </div>
       <Divider />
       <div className="box">
-        <p>动态加载：</p>
+        <p>动态加载+静态搜索：</p>
         <BlMultiCascader
+          data={defaultData}
           style={{ width: 300 }}
           value={value1}
           onChange={(value) => {
             setValue1(value);
             console.log(`结果1：${value}`);
           }}
-          data={defaultData}
           loadData={(node) => {
             return fetchNodes(node.id);
           }}
-          searchable
+          onSearch={(value) => {
+            return multiCascaderOptions;
+          }}
         />
       </div>
     </>

@@ -1,9 +1,12 @@
 import React, { ReactNode, useState } from 'react';
-import { MultiCascader } from 'rsuite';
+// import { MultiCascader } from 'rsuite';
+import MultiCascader from 'gc-rsuite/lib/MultiCascader';
 import { BlMultiCascaderProps, DataItemType } from './index.type';
-import './index.less';
 import Icon, { SearchOutlined } from '@ant-design/icons';
 import { Input, Spin } from 'antd';
+require('gc-rsuite/styles/less/index.less');
+import './index.less';
+
 const suffix = (
   <SearchOutlined
     style={{
@@ -21,6 +24,8 @@ export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
     onSearch,
     placeholder = '请选择...',
     searchPlaceholder = '请输入...',
+    // noResultsText = '没查询到结果',
+    // checkAllText = '全部',
     loadData,
     searchable,
   } = props;
@@ -29,11 +34,27 @@ export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
   const [blData, setBlData] = useState<any[]>(data);
 
   const handleChange = (value, event) => {
+    console.log('handleChange', value);
     setBlvalue(value);
     onChange && onChange(value, event);
   };
-  const handleOnSearch = async (v) => {
-    const value = v.target.value;
+  // 工具函数 搜索
+  const getSearchRes = (inputValue, options, res) => {
+    options.map((item) => {
+      if (item.value.toLowerCase().indexOf(inputValue.toLowerCase()) > -1) {
+        res.push(item);
+      }
+    });
+    return res;
+  };
+  // 搜索
+  const handleOnSearch = async (inputValue, e) => {
+    console.log('搜索', inputValue);
+    if (typeof onSearch === 'function') {
+      const data = await onSearch(inputValue, e);
+      console.log(`data`, data);
+    }
+    setBlData([]);
   };
   // 渲染菜单栏
   const renderMenu = (children, menu) => {
@@ -47,20 +68,10 @@ export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
         </p>
       );
     }
-    if (searchable) {
-      return (
-        <div>
-          <div style={{ padding: 8 }}>
-            <Input suffix={suffix} placeholder={searchPlaceholder} onPressEnter={handleOnSearch} />
-          </div>
-          <Spin spinning={loading}>{menu}</Spin>
-        </div>
-      );
-    }
     return menu;
   };
-  // 工具函数
-  const handleArrayObj = (options, selectOption) => {
+  // loadData工具函数,将请求到的选项替换之前节点
+  const getNextSelectOption = (options, selectOption) => {
     return options.map((item) => {
       if (item.value == selectOption.value) {
         return (item = selectOption);
@@ -68,30 +79,43 @@ export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
       return item;
     });
   };
+  // select
   const onSelect = async (item: DataItemType, selectedPaths: DataItemType[], event) => {
     const targetOption = selectedPaths[selectedPaths.length - 1];
-    if (typeof loadData === 'function') {
-      const data = await loadData(item);
-      targetOption.children = data;
-      setBlData(handleArrayObj(blData, targetOption));
+    if (targetOption?.children) {
+      if (typeof loadData === 'function') {
+        const data = await loadData(item);
+        targetOption.children = data;
+        setBlData(getNextSelectOption(blData, targetOption));
+      }
     }
   };
 
   return (
     <div>
       <MultiCascader
+        cascade={false}
+        countable={false}
         placeholder={placeholder}
-        // searchPlaceholder={searchPlaceholder}
+        searchPlaceholder={searchPlaceholder}
+        // this is rsuite 库拥有的属性
+        // locale={{
+        //   searchPlaceholder: 'aasdsad',
+        //   noResultsText,
+        //   placeholder,
+        //   checkAll: checkAllText,
+        // }}
         {...props}
         value={defaultValue || blvalue}
         onChange={(value, event) => handleChange(value, event)}
         renderMenu={renderMenu}
         onSelect={onSelect}
         data={blData}
-        searchable={false}
+        onSearch={handleOnSearch}
+        onEntered={() => {
+          console.log(`onEntered`);
+        }}
       />
     </div>
   );
 };
-// 异步加载
-// 用户点击某个选项，onSelect函数获取用户点击的选项，选中项Id去发送请求（loading）获取子列表,子列表拼接到选中项目的chirld中

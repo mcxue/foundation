@@ -1,13 +1,6 @@
 import { ReactNode } from 'react';
 import { MultiCascaderProps } from 'rsuite';
 
-export interface BlMultiCascaderProps extends MultiCascaderProps {
-  /**
-   * 这是一个新增的属性
-   * @default	[BL] 动态加载选项
-   */
-  loadData?: (item: DataItemType) => DataItemType[];
-}
 export interface DataItemType {
   /** The value of the option corresponds to the `valueKey` in the data. **/
   value: string;
@@ -31,4 +24,32 @@ export interface DataItemType {
    * Used for components that have cascading relationships and lazy loading of children. E.g. Casacder, MultiCascader
    */
   loading?: boolean;
+}
+
+export interface BlMultiCascaderProps extends MultiCascaderProps {
+  /**
+   * 动态加载选项
+   * @default	[BL]
+   */
+  loadData?: (item: DataItemType) => DataItemType[];
+  /**
+   * 搜索框占位符
+   * @default	[BL] '请输入...'
+   */
+  searchPlaceholder?: string;
+  /**
+   * 未查询到结果占位符
+   * @default	[BL] '未查询到结果'
+   */
+  noResultsText?: string;
+  /**
+   * 节点全选文本
+   * @default	[BL] '全部'
+   */
+  checkAllText?: string;
+  /**
+   * 节点全选文本
+   * @default	[BL] '全部'
+   */
+  onSearch?: (searchKeyword: string, event) => DataItemType[];
 }
