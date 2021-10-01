@@ -18,7 +18,7 @@ export default () => {
       <div className="box">
         <p>级联：</p>
         <BlMultiCascader
-          data={multiCascaderOptions}
+          options={multiCascaderOptions}
           style={{ width: 300 }}
           value={value1}
           onChange={(value) => {
@@ -33,7 +33,7 @@ export default () => {
         <p>非级联：</p>
         <BlMultiCascader
           cascade={false}
-          data={multiCascaderOptions}
+          options={multiCascaderOptions}
           style={{ width: 300 }}
           value={value2}
           onChange={(value) => {

@@ -43,11 +43,11 @@ group:
 
 <code src="./demo/demo2/index.tsx"></code>
 
-<!-- ### 搜索
+### 搜索
 
-默认 searchable 为 true
+默认 searchable 为 true。搜索都是动态搜索，需要添加onSearch方法
 
-<code src="./demo/demo4/index.tsx"></code> -->
+<code src="./demo/demo4/index.tsx"></code>
 
 ### 动态加载
 

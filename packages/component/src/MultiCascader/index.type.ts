@@ -28,28 +28,41 @@ export interface DataItemType {
 
 export interface BlMultiCascaderProps extends MultiCascaderProps {
   /**
-   * 动态加载选项
-   * @default	[BL]
+   * 	[BL] 级联组件数据源
+   * @default ‘[]’
+   */
+  options: DataItemType[]
+  /**
+   * [BL] 动态加载选项
+   * @default	
    */
   loadData?: (item: DataItemType) => DataItemType[];
   /**
-   * 搜索框占位符
-   * @default	[BL] '请输入...'
+    * [BL] 搜索的回调函数
+    * @default 
+    */
+  onSearch?: (searchKeyword: string, event) => DataItemType[];
+  /**
+   * [BL] 搜索框占位符
+   * @default	 '请输入...'
    */
   searchPlaceholder?: string;
   /**
-   * 未查询到结果占位符
-   * @default	[BL] '未查询到结果'
+   * [BL] 自定义分隔符
+   * @default ','
    */
-  noResultsText?: string;
-  /**
-   * 节点全选文本
-   * @default	[BL] '全部'
-   */
-  checkAllText?: string;
-  /**
-   * 节点全选文本
-   * @default	[BL] '全部'
-   */
-  onSearch?: (searchKeyword: string, event) => DataItemType[];
+  customDivider: "string"
+
+
+  // /**
+  //  * [BL] 未查询到结果占位符
+  //  * @default	'未查询到结果'
+  //  */
+  //  noResultsText?: string;
+  //  /**
+  //   * [BL] 节点全选文本
+  //   * @default	'全部'
+  //   */
+  //  checkAllText?: string;
+
 }

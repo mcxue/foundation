@@ -25,7 +25,6 @@ export const BlCascader = (props: BlCascaderProps) => {
     onSearch,
     placeholder = '请选择...',
     searchPlaceholder = '请输入...',
-    fetchData,
   } = props;
   // 处理默认值
   const getDefaultValue = (value: CascaderValueType | undefined) => {
@@ -55,19 +54,6 @@ export const BlCascader = (props: BlCascaderProps) => {
     return;
   };
 
-  const handleFetchData = async () => {
-    setLoading(true);
-    try {
-      if (typeof fetchData === 'function') {
-        const data = await fetchData();
-        console.log(`data`, data);
-        setBloptions(data);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log(`error`, error);
-    }
-  };
   const handleOnSearch = async (v) => {
     const value = v.target.value;
     setLoading(true);
@@ -77,11 +63,12 @@ export const BlCascader = (props: BlCascaderProps) => {
     }
 
     if (typeof onSearch === 'function') {
-      const { data } = await onSearch(value);
+      const data = await onSearch(value);
 
       // selectedOption 塞到data上去,以保证输入框的值能正确的显示
       // 如果data上有selectedOption，从其中去重
       const options = [selectedOption, ...data];
+      // TODO selectedOption 可能为understand
       setBloptions(deDuplication(options));
       setLoading(false);
       return;
@@ -115,7 +102,7 @@ export const BlCascader = (props: BlCascaderProps) => {
   function deDuplication(arr) {
     let obj = {};
     const arrlist = arr.reduce((cur, next) => {
-      obj[next.value] ? '' : (obj[next.value] = true && cur.push(next));
+      obj[next?.value] ? '' : (obj[next?.value] = true && cur.push(next));
       return cur;
     }, []);
     return arrlist;

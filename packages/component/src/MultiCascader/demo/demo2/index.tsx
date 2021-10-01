@@ -1,6 +1,6 @@
 /**
  * title: 关键属性
- * desc:  renderValue、renderMenuItem
+ * desc:  customDivider、renderValue、renderMenuItem
  *
  */
 
@@ -22,53 +22,47 @@ export default () => {
       <div className="box">
         <p>`-`连接：</p>
         <BlMultiCascader
-          data={multiCascaderOptions}
+          options={multiCascaderOptions}
           style={{ width: 300 }}
           value={value1}
           onChange={(value) => {
             console.log(`value1`, value);
             setValue1(value);
           }}
-          renderValue={(value, selectedItems, selectedElement) => (
-            <span>{selectedItems.map((item) => item.label).join(' - ')}</span>
-          )}
+          customDivider={' - '}
         />
       </div>
       <div className="box">
         <p>`/`连接：</p>
         <BlMultiCascader
-          data={multiCascaderOptions}
+          options={multiCascaderOptions}
           style={{ width: 300 }}
           value={value2}
           onChange={(value) => {
             console.log(`value2`, value);
             setValue2(value);
           }}
-          renderValue={(value, selectedItems, selectedElement) => (
-            <span>{selectedItems.map((item) => item.label).join(' / ')}</span>
-          )}
+          customDivider={' / '}
         />
       </div>
       <div className="box">
         <p>`、`连接：</p>
         <BlMultiCascader
-          data={multiCascaderOptions}
+          options={multiCascaderOptions}
           style={{ width: 300 }}
           value={value3}
           onChange={(value) => {
             console.log(`value3`, value);
             setValue3(value);
           }}
-          renderValue={(value, selectedItems, selectedElement) => (
-            <span>{selectedItems.map((item) => item.label).join(' 、')}</span>
-          )}
+          customDivider={' 、'}
         />
       </div>
       <Divider />
       <div className="box">
         <p>自定义拼接默认值：</p>
         <BlMultiCascader
-          data={multiCascaderOptions}
+          options={multiCascaderOptions}
           style={{ width: 300 }}
           value={value4}
           onChange={(value) => {
@@ -94,7 +88,7 @@ export default () => {
       <div className="box">
         <p>自定义选项：</p>
         <BlMultiCascader
-          data={multiCascaderOptions}
+          options={multiCascaderOptions}
           style={{ width: 300 }}
           value={value5}
           onChange={(value) => {

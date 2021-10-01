@@ -2,24 +2,17 @@ import React, { ReactNode, useState } from 'react';
 // import { MultiCascader } from 'rsuite';
 import MultiCascader from 'gc-rsuite/lib/MultiCascader';
 import { BlMultiCascaderProps, DataItemType } from './index.type';
-import Icon, { SearchOutlined } from '@ant-design/icons';
-import { Input, Spin } from 'antd';
+import Icon from '@ant-design/icons';
 require('gc-rsuite/styles/less/index.less');
 import './index.less';
 
-const suffix = (
-  <SearchOutlined
-    style={{
-      fontSize: 16,
-      // color: '#1890ff',
-    }}
-  />
-);
+
 export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
   const {
-    data,
+    options = [],
     value,
     defaultValue,
+    customDivider,
     onChange,
     onSearch,
     placeholder = '请选择...',
@@ -27,11 +20,10 @@ export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
     // noResultsText = '没查询到结果',
     // checkAllText = '全部',
     loadData,
-    searchable,
   } = props;
   const [blvalue, setBlvalue] = useState(value);
   const [loading, setLoading] = useState(false);
-  const [blData, setBlData] = useState<any[]>(data);
+  const [blData, setBlData] = useState<DataItemType[]>(options);
 
   const handleChange = (value, event) => {
     console.log('handleChange', value);
@@ -49,12 +41,13 @@ export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
   };
   // 搜索
   const handleOnSearch = async (inputValue, e) => {
-    console.log('搜索', inputValue);
+    // TODO 可以加个防抖
     if (typeof onSearch === 'function') {
+      setLoading(true);
       const data = await onSearch(inputValue, e);
-      console.log(`data`, data);
+      setBlData(data);
+      setLoading(false);
     }
-    setBlData([]);
   };
   // 渲染菜单栏
   const renderMenu = (children, menu) => {
@@ -70,6 +63,14 @@ export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
     }
     return menu;
   };
+  // 渲染自定义选项
+  const renderValue = (value, selectedItems, selectedElement) => {
+
+    if (customDivider) {
+      return <span>{selectedItems.map((item) => item.label).join(customDivider)}</span>
+    }
+    return <span>{selectedItems.map((item) => item.label).join(' , ')}</span>
+  }
   // loadData工具函数,将请求到的选项替换之前节点
   const getNextSelectOption = (options, selectOption) => {
     return options.map((item) => {
@@ -98,6 +99,7 @@ export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
         countable={false}
         placeholder={placeholder}
         searchPlaceholder={searchPlaceholder}
+        renderValue={renderValue}
         // this is rsuite 库拥有的属性
         // locale={{
         //   searchPlaceholder: 'aasdsad',
@@ -112,9 +114,6 @@ export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
         onSelect={onSelect}
         data={blData}
         onSearch={handleOnSearch}
-        onEntered={() => {
-          console.log(`onEntered`);
-        }}
       />
     </div>
   );

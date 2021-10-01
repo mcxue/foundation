@@ -40,7 +40,7 @@ export default () => {
           <Form.Item name="multiCascader">
             <BlMultiCascader
               cascade={false}
-              data={multiCascaderOptions}
+              options={multiCascaderOptions}
               style={{ width: 300 }}
               uncheckableItemValues={getIsNotLeafArray()}
             />

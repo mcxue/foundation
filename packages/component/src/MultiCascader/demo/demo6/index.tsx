@@ -32,7 +32,7 @@ export default () => {
             <Input />
           </Form.Item>
           <Form.Item name="multiCascader" label="多选框">
-            <BlMultiCascader data={multiCascaderOptions} style={{ width: 300 }} />
+            <BlMultiCascader options={multiCascaderOptions} style={{ width: 300 }} searchable={false} />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
