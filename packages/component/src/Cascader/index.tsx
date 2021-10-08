@@ -67,8 +67,12 @@ export const BlCascader = (props: BlCascaderProps) => {
 
       // selectedOption 塞到data上去,以保证输入框的值能正确的显示
       // 如果data上有selectedOption，从其中去重
-      const options = [selectedOption, ...data];
-      // TODO selectedOption 可能为understand
+      let options
+      // selectedOption 可能为understand
+      if (selectedOption) {
+        options = [selectedOption, ...data];
+      }
+      options = data;
       setBloptions(deDuplication(options));
       setLoading(false);
       return;

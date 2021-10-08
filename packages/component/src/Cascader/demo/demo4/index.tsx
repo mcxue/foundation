@@ -70,20 +70,19 @@ const App = () => {
     console.log(`use:搜索`, value);
     return new Promise((resove) => {
       setTimeout(() => {
-        resove({
-          data: [
-            {
-              value: 'hubei',
-              label: '湖北',
-              isLeaf: false,
-            },
-            {
-              value: 'hunan',
-              label: '湖南',
-              isLeaf: false,
-            },
-          ],
-        });
+        resove([
+          {
+            value: 'hubei',
+            label: '湖北',
+            isLeaf: false,
+          },
+          {
+            value: 'hunan',
+            label: '湖南',
+            isLeaf: false,
+          },
+        ],
+        );
       }, 3000);
     });
   };
