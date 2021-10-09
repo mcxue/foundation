@@ -6,7 +6,6 @@ import Icon from '@ant-design/icons';
 require('gc-rsuite/styles/less/index.less');
 import './index.less';
 
-
 export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
   const {
     options = [],
@@ -26,7 +25,6 @@ export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
   const [blData, setBlData] = useState<DataItemType[]>(options);
 
   const handleChange = (value, event) => {
-    console.log('handleChange', value);
     setBlvalue(value);
     onChange && onChange(value, event);
   };
@@ -65,12 +63,11 @@ export const BlMultiCascader: React.FC<BlMultiCascaderProps> = (props) => {
   };
   // 渲染自定义选项
   const renderValue = (value, selectedItems, selectedElement) => {
-
     if (customDivider) {
-      return <span>{selectedItems.map((item) => item.label).join(customDivider)}</span>
+      return <span>{selectedItems.map((item) => item.label).join(customDivider)}</span>;
     }
-    return <span>{selectedItems.map((item) => item.label).join(' , ')}</span>
-  }
+    return <span>{selectedItems.map((item) => item.label).join(' , ')}</span>;
+  };
   // loadData工具函数,将请求到的选项替换之前节点
   const getNextSelectOption = (options, selectOption) => {
     return options.map((item) => {

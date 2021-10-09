@@ -12,7 +12,7 @@ import './index.less';
 
 export default () => {
   const [value1, setValue1] = useState(['1-1', '2']);
-  const [value2, setValue2] = useState(['1-1',]);
+  const [value2, setValue2] = useState(['1-1']);
 
   function createNode() {
     const hasChildren = Math.random() > 0.2;
@@ -44,7 +44,7 @@ export default () => {
         resolve(multiCascaderOptions);
       }, 1000);
     });
-  }
+  };
   const defaultData = multiCascaderOptions;
 
   return (
@@ -56,8 +56,8 @@ export default () => {
           style={{ width: 300 }}
           value={value1}
           onChange={(value) => {
-            setValue2(value);
-            console.log(`结果2：${value}`);
+            setValue1(value);
+            console.log(`value2：${value}`);
           }}
           onSearch={(value) => {
             console.log(`搜索：${value}`);
@@ -73,8 +73,8 @@ export default () => {
           style={{ width: 300 }}
           value={value2}
           onChange={(value) => {
-            setValue1(value);
-            console.log(`结果1：${value}`);
+            setValue2(value);
+            console.log(`value2：${value}`);
           }}
           loadData={(node) => {
             return fetchNodes(node.id);

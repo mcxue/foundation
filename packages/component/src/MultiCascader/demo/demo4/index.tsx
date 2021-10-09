@@ -19,7 +19,7 @@ export default () => {
         resolve(multiCascaderOptions);
       }, 1000);
     });
-  }
+  };
   return (
     <>
       <div className="box">
@@ -27,14 +27,14 @@ export default () => {
         <BlMultiCascader
           options={multiCascaderOptions}
           style={{ width: 300 }}
-          value={value2}
+          value={value1}
           onChange={(value) => {
-            setValue2(value);
-            console.log(`结果2：${value}`);
+            setValue1(value);
+            console.log(`value1：${value}`);
           }}
           onSearch={(value) => {
             console.log(`搜索：${value}`);
-            return fetchSearch(value)
+            return fetchSearch(value);
           }}
         />
       </div>
@@ -44,10 +44,10 @@ export default () => {
         <BlMultiCascader
           options={multiCascaderOptions}
           style={{ width: 300 }}
-          value={value1}
+          value={value2}
           onChange={(value) => {
-            setValue1(value);
-            console.log(`结果1：${value}`);
+            setValue2(value);
+            console.log(`value2：${value}`);
           }}
           searchable={false}
         />

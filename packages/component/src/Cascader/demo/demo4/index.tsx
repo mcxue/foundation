@@ -43,8 +43,8 @@ const App = () => {
   };
 
   const onChange = (value, selectedOptions) => {
-    console.log('value1', value, selectedOptions);
-    setvalue2(value2);
+    console.log('value2', value);
+    setvalue2(value);
   };
   const loadData = (selectedOptions) => {
     const targetOption = selectedOptions[selectedOptions.length - 1];
@@ -63,7 +63,7 @@ const App = () => {
           value: 'dynamic2',
         },
       ];
-      // setOptions([...options]);
+      setOptions([...options]);
     }, 1000);
   };
   const searchData = (value) => {
@@ -81,8 +81,7 @@ const App = () => {
             label: '湖南',
             isLeaf: false,
           },
-        ],
-        );
+        ]);
       }, 3000);
     });
   };
@@ -103,7 +102,7 @@ const App = () => {
           value={value1}
           onChange={(value) => {
             setvalue1(value);
-            console.log('value1: ', value1);
+            console.log('value1: ', value);
           }}
           style={{ width: 300 }}
           options={cascaderOptions}
