@@ -1,3 +1,3 @@
-import BlSortFormList from './BlSortFormList';
+import BlSortFormList, { validateSortFormList } from './BlSortFormList';
 
-export { BlSortFormList };
+export { BlSortFormList, validateSortFormList };

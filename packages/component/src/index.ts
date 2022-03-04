@@ -7,7 +7,7 @@ import { BlTable } from './BlTable';
 import { BlCascader } from './Cascader';
 import { BlMultiCascader } from './MultiCascader';
 import { BlSearchSelect } from './BlSearchSelect';
-import { BlSortFormList } from './BlSortFormList';
+import { BlSortFormList, validateSortFormList } from './BlSortFormList';
 
 import type { ButtonProps } from './Button/index.type';
 import type { BlUploadProps, BlUploadFileType } from './BlUpload/index.type';
@@ -34,6 +34,7 @@ export {
   BlMultiCascader,
   BlSearchSelect,
   BlSortFormList,
+  validateSortFormList,
 };
 export { cascaderOptions, multiCascaderOptions };
 

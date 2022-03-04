@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Form, FormInstance, Button, Popover, Space, Tooltip } from 'antd';
+import { Input, Form, FormInstance, Button, Popover, Space, Tooltip, Table } from 'antd';
 import { FormListFieldData, FormListProps } from 'antd/lib/form/FormList';
 import { ColumnProps, TableProps } from 'antd/lib/table';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { NamePath } from 'antd/es/form/interface';
 //
 import { BlIcon, BlTable } from '../index';
+import { VList, scrollTo } from '../BlTable/VirtualTable';
 
 const { TextArea } = Input;
 
@@ -95,7 +96,24 @@ interface StoreDetailProps {
    * @default 0
    */
   initLineCount?: number;
+  /**
+   * 是否启用虚拟滚动展示大量数据
+   * @default false
+   */
+  useVirtual?: boolean;
 }
+
+const VlistComponents = VList({ height: 500, resetTopWhenDataChange: false });
+const VRow = VlistComponents.body.row;
+const VWrapper = VlistComponents.body.wrapper;
+
+// 拖动的元素 虚拟滚动时的
+const VSortableItem = SortableElement((itemProps: any) => <VRow {...itemProps} />);
+const VTableContainer = SortableContainer((tableProps: any) => <VWrapper {...tableProps} />);
+
+// 拖动的元素
+const SortableItem = SortableElement((itemProps: any) => <tr {...itemProps} />);
+const TableContainer = SortableContainer((tableProps: any) => <tbody {...tableProps} />);
 
 /**
  * 记录表单删除的对象id
@@ -119,6 +137,51 @@ export const setFormDeleteList = ({
   if (afterFormatDeleteValue) {
     form.setFields([{ name: setValueName, value: [...currentDeleteList, afterFormatDeleteValue] }]);
   }
+};
+
+export const validateSortFormList = (form, field) => {
+  const toFirstError = (error) => {
+    const firstErrorIndex = error.errorFields[0].name[1];
+    scrollTo({ row: firstErrorIndex });
+  };
+
+  return new Promise((resolve, reject) => {
+    const allFiledsValue = _.get(form.getFieldsValue(true), field, []);
+
+    if (!_.isEmpty(allFiledsValue)) {
+      form
+        .validateFields()
+        .then(() => {
+          scrollTo({ row: 0 });
+          let i = 0;
+          let len = allFiledsValue.length;
+          let hasErrorFiled = false;
+
+          const timer = setInterval(async () => {
+            try {
+              await form.validateFields();
+
+              if (i < len) {
+                i += 10;
+                scrollTo({ row: i });
+              } else {
+                clearInterval(timer);
+                scrollTo({ row: 1 });
+                resolve(true);
+              }
+            } catch (error) {
+              clearInterval(timer);
+              toFirstError(error);
+              reject(false);
+            }
+          }, 50);
+        })
+        .catch((error) => {
+          toFirstError(error);
+          reject(false);
+        });
+    }
+  });
 };
 
 /**
@@ -159,6 +222,7 @@ const BlSortFormList = (props: StoreDetailProps) => {
     handleAdd,
     listRules = [],
     initLineCount = 0,
+    useVirtual = false,
   } = props;
   const [dataSource, setDataSource] = useState<any>([]);
   const [hovered, setHovered] = useState(false);
@@ -471,12 +535,6 @@ const BlSortFormList = (props: StoreDetailProps) => {
               return baseColumns;
             };
 
-            // 拖动的元素
-            const SortableItem = SortableElement((itemProps: any) => <tr {...itemProps} />);
-            const TableContainer = SortableContainer((tableProps: any) => (
-              <tbody {...tableProps} />
-            ));
-
             const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
               move(oldIndex, newIndex);
             };
@@ -484,23 +542,54 @@ const BlSortFormList = (props: StoreDetailProps) => {
             const DraggableBodyRow = (bodyRowProps: any) => {
               const index = data.findIndex((x: any) => x.key === bodyRowProps['data-row-key']);
 
-              return <SortableItem index={index} {...bodyRowProps} />;
+              return useVirtual ? (
+                <VSortableItem index={index} {...bodyRowProps} />
+              ) : (
+                <SortableItem index={index} {...bodyRowProps} />
+              );
             };
 
-            const DraggableContainer = (containerProps: any) => (
-              <TableContainer
-                useDragHandle
-                helperClass="row-dragging"
-                onSortEnd={onSortEnd}
-                {...containerProps}
-              />
-            );
+            const DraggableContainer = (containerProps: any) =>
+              useVirtual ? (
+                <VTableContainer
+                  useDragHandle
+                  helperClass="row-dragging"
+                  onSortEnd={onSortEnd}
+                  {...containerProps}
+                />
+              ) : (
+                <TableContainer
+                  useDragHandle
+                  helperClass="row-dragging"
+                  onSortEnd={onSortEnd}
+                  {...containerProps}
+                />
+              );
+
+            const getTableComponents = () => {
+              return useVirtual
+                ? {
+                    ...VlistComponents,
+                    body: {
+                      ...VlistComponents?.body,
+                      wrapper: DraggableContainer,
+                      row: DraggableBodyRow,
+                    },
+                  }
+                : {
+                    body: {
+                      wrapper: DraggableContainer,
+                      row: DraggableBodyRow,
+                    },
+                  };
+            };
 
             return (
               <>
-                <BlTable
+                <Table
                   scroll={{
                     y: 500,
+                    x: 200,
                   }}
                   pagination={false}
                   columns={getColumns()}
@@ -508,16 +597,7 @@ const BlSortFormList = (props: StoreDetailProps) => {
                   footer={() => renderFooter(add, fields)}
                   rowKey={(field) => field?.key}
                   id="attrTable"
-                  components={
-                    isNeedDrag
-                      ? {
-                          body: {
-                            wrapper: DraggableContainer,
-                            row: DraggableBodyRow,
-                          },
-                        }
-                      : {}
-                  }
+                  components={isNeedDrag ? getTableComponents() : {}}
                   style={style}
                   {...tableProps}
                 />
